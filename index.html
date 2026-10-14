@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="초등학교 5학년 사회 - 조선 시대 문화 퀴즈 웹앱">
+  <title>조선 시대 문화 탐험 퀴즈 | 초등 5학년 사회</title>
+  
+  <!-- Pretendard 웹폰트 (고해상도 TV 및 모바일에서 또렷한 한글 가독성) -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-font-size="normal">
+  <!-- 폭죽 캔버스 -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-wrapper">
+    <!-- 상단 헤더 / 툴바 -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="grade-badge">초등 5학년 사회</span>
+        <h1 class="header-title">조선 시대 문화 퀴즈</h1>
+      </div>
+      
+      <div class="header-controls">
+        <!-- 교실 TV / 모바일용 글자 크기 조절 버튼 -->
+        <div class="font-size-group" title="글자 크기 조절 (교실 TV 맞춤)">
+          <span class="control-label">글자 크기</span>
+          <button id="font-decrease-btn" class="ctrl-btn" aria-label="글자 작게">A-</button>
+          <button id="font-reset-btn" class="ctrl-btn active" aria-label="글자 보통">보통</button>
+          <button id="font-increase-btn" class="ctrl-btn" aria-label="글자 크게 (TV용)">A+</button>
+        </div>
+
+        <!-- 사운드 토글 버튼 -->
+        <button id="sound-toggle-btn" class="ctrl-btn sound-btn" aria-label="효과음 켜기/끄기" title="효과음">
+          <span id="sound-icon">🔊</span>
+          <span id="sound-text" class="sound-text">소리 켬</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="main-card">
+      
+      <!-- 1. 시작 화면 -->
+      <section id="start-screen" class="view-section active">
+        <div class="start-content">
+          <div class="hero-emblem">
+            <span class="emblem-symbol">📜</span>
+            <div class="emblem-deco">광화문에서 만나는 우리 문화</div>
+          </div>
+          <h2 class="hero-title">조선 시대 문화 탐험대!</h2>
+          <p class="hero-desc">
+            세종대왕의 훈민정음부터 장영실의 과학 발명품, 정약용의 거중기까지!<br>
+            초등학교 5학년 사회 시간에 배운 조선의 찬란한 문화를 퀴즈로 재미있게 확인해 보세요.
+          </p>
+
+          <div class="quiz-info-chips">
+            <span class="info-chip">✨ 총 10문제</span>
+            <span class="info-chip">🎯 4지 선다형</span>
+            <span class="info-chip">💡 바로 나오는 쉬운 해설</span>
+            <span class="info-chip">📺 교실 TV & 스마트폰 최적화</span>
+          </div>
+
+          <div class="start-action-box">
+            <button id="start-btn" class="primary-btn pulse-animation">
+              퀴즈 시작하기 🚀
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 퀴즈 풀이 화면 -->
+      <section id="quiz-screen" class="view-section">
+        <!-- 진행 바 & 현황 헤더 -->
+        <div class="quiz-meta-bar">
+          <div class="meta-info">
+            <span id="category-badge" class="category-tag">조선의 과학</span>
+            <span id="question-counter" class="question-number">문제 <strong>1</strong> / 10</span>
+          </div>
+          <div class="score-live-badge">
+            현재 맞힌 문제: <span id="live-score">0</span>개
+          </div>
+        </div>
+
+        <div class="progress-bar-container" aria-label="퀴즈 진행도">
+          <div id="progress-bar-fill" class="progress-fill" style="width: 10%;"></div>
+        </div>
+
+        <!-- 문제 질문 카드 -->
+        <div class="question-container">
+          <div class="q-badge">Q<span id="q-number-indicator">1</span></div>
+          <h2 id="question-text" class="question-title">
+            세종대왕이 백성들이 글자를 쉽게 익히고 쓰도록 만든 우리나라 고유의 문자는 무엇일까요?
+          </h2>
+        </div>
+
+        <!-- 4지선다 보기 영역 -->
+        <div id="options-container" class="options-grid" role="radiogroup" aria-label="문제 보기">
+          <!-- JS로 보기 버튼이 동적으로 생성됩니다 -->
+        </div>
+
+        <!-- 즉각 피드백 & 해설 박스 -->
+        <div id="feedback-panel" class="feedback-panel hidden" aria-live="polite">
+          <div class="feedback-header">
+            <span id="feedback-icon" class="feedback-icon">🎉</span>
+            <span id="feedback-title" class="feedback-title">정답입니다!</span>
+          </div>
+          <p id="feedback-explanation" class="feedback-text">
+            세종대왕은 글을 몰라 억울한 일을 겪는 백성들을 위해 1443년에 훈민정음을 만들었어요.
+          </p>
+          <div class="feedback-action">
+            <button id="next-btn" class="primary-btn next-step-btn">
+              <span>다음 문제로 가기</span>
+              <span class="arrow-icon">➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 결과 화면 -->
+      <section id="result-screen" class="view-section">
+        <div class="result-content">
+          <div id="result-emblem" class="result-emblem">👑</div>
+          <span class="result-subtitle">조선 시대 문화 탐험 완료!</span>
+          <h2 id="result-title" class="result-title">장원급제 대제학!</h2>
+
+          <!-- 점수판 -->
+          <div class="score-board">
+            <div class="score-main">
+              <span class="score-label">최종 점수</span>
+              <div class="score-number-wrap">
+                <span id="final-score" class="score-highlight">100</span>
+                <span class="score-max">점</span>
+              </div>
+            </div>
+            <div class="score-divider"></div>
+            <div class="score-sub">
+              <div class="sub-stat">
+                <span class="stat-label">맞힌 문제</span>
+                <span id="correct-count" class="stat-val correct-color">10개</span>
+              </div>
+              <div class="sub-stat">
+                <span class="stat-label">틀린 문제</span>
+                <span id="wrong-count" class="stat-val wrong-color">0개</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 맞춤 격려 메시지 -->
+          <p id="result-message" class="result-message">
+            훌륭해요! 조선 시대 문화를 완벽하게 이해하고 있군요!
+          </p>
+
+          <!-- 액션 버튼들 -->
+          <div class="result-actions">
+            <button id="restart-btn" class="primary-btn restart-btn">
+              🔄 퀴즈 다시 풀기
+            </button>
+            <button id="toggle-review-btn" class="secondary-btn review-btn">
+              📝 전체 해설 및 오답 복습하기
+            </button>
+          </div>
+
+          <!-- 전체 문제 복습 (아코디언 형태) -->
+          <div id="review-container" class="review-container hidden">
+            <h3 class="review-heading">📜 문제 다시 보기 및 전체 해설</h3>
+            <div id="review-list" class="review-list">
+              <!-- JS에서 생성됨 -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="app-footer">
+      <span>초등학교 5학년 2학기 사회 ｜ 조선의 발전과 민족 문화</span>
+    </footer>
+  </div>
+
+  <!-- 스크립트 연결 -->
+  <script src="quiz-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
