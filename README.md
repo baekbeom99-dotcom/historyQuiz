@@ -1,5 +1,7 @@
 # 초등 5학년 사회 - 조선 시대 문화 퀴즈 웹앱 🎓
 
+> 🌐 **실시간 웹앱 주소**: [https://baekbeom99-dotcom.github.io/historyQuiz/](https://baekbeom99-dotcom.github.io/historyQuiz/)
+
 초등학교 5학년 사회과 교육과정(조선의 발전과 민족 문화)에 맞춘 반응형 퀴즈 웹 애플리케이션입니다.  
 교실 전면 TV, 전자칠판, 태블릿, 학생 개인 스마트폰 등 다양한 기기에서 또렷하게 실행할 수 있도록 제작되었습니다.
 
